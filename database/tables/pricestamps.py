@@ -35,3 +35,12 @@ class Pricestamp(Base):
         query: Select = query.order_by(Pricestamp.timestamp)
         query_result: Result = await session.execute(query)
         return query_result.scalars().all()
+
+    @staticmethod
+    async def get_last_pricestamp(session: AsyncSession, ticker: str):
+        query: Select = select(Pricestamp)
+        query: Select = query.filter(Pricestamp.ticker == ticker)
+        query: Select = query.order_by(desc(Pricestamp.timestamp))
+        query: Select = query.limit(1)
+        query_result: Result = await session.execute(query)
+        return query_result.scalars().first()
