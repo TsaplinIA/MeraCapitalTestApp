@@ -27,20 +27,28 @@
 
 ## Демонстрация
 #### 1. Подготовка к запуску
-
-#### 2. Запуск сканнера
-
-#### 3. Запуск сервера с API  
-Запускаем сервер  
-![Start server](./images/server-run.png)  
-Swagger по адресу ".../docs"  
-![swagger endpoints](./images/swagger-endpoints.png)  
-Redoc по адресу ".../redoc"  
-![swagger endpoints1](./images/redoc-endpoint-price-list.png)  
-![swagger endpoints2](./images/redoc-endpoint-last-price.png)  
-Результаты запросов на сервер(через Swagger)  
-![swagger curl1](./images/swagger-curl-price-list.png)   
-![swagger curl2](./images/swagger-curl-last-price.png)  
+Клонирование репозитория  
+![git clone](./images/git-clone.png)   
+Установка зависимостей   
+![poetry install](./images/poetry-install.png)    
+Запуск базы данных   
+![docker-compose](./images/docker-compose-up.png)    
+Миграции   
+![docker-compose](./images/alembic-upgrade.png)    
+#### 2. Запуск сканера    
+Запускаем сканер    
+![docker-compose](./images/scanner.png)     
+#### 3. Запуск сервера с API    
+Запускаем сервер   
+![Start server](./images/server-run.png)   
+Swagger по адресу ".../docs"   
+![swagger endpoints](./images/swagger-endpoints.png)   
+Redoc по адресу ".../redoc"   
+![swagger endpoints1](./images/redoc-endpoint-price-list.png)   
+![swagger endpoints2](./images/redoc-endpoint-last-price.png)   
+Результаты запросов на сервер(через Swagger)   
+![swagger curl1](./images/swagger-curl-price-list.png)    
+![swagger curl2](./images/swagger-curl-last-price.png)   
 ## Тестовое задание
 Тестовое задание на позицию junior back-
 end разработчика   
