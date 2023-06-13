@@ -1,13 +1,13 @@
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, AsyncAttrs
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import registry
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.inspection import inspect
 
 from config import DATABASE_URL
 
-mapper_registry = registry()
-Base = mapper_registry.generate_base()
+
+class Base(AsyncAttrs, DeclarativeBase):
+    pass
 
 
 def default_repr(x: "Base") -> str:
@@ -19,7 +19,7 @@ def default_repr(x: "Base") -> str:
 Base.__repr__ = default_repr
 
 engine = create_async_engine(DATABASE_URL, echo=False)
-async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def get_session() -> AsyncSession:
