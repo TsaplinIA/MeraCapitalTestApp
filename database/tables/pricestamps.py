@@ -21,6 +21,7 @@ class Pricestamp(Base):
         session.add(new_pricestamp)
         try:
             await session.commit()
+            print(f"Pricestamp {str(new_pricestamp.pricestamp_idx)} has been saved")
             return new_pricestamp
         except:
             await session.rollback()
