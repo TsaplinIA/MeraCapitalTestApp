@@ -27,17 +27,9 @@
 
 ## Демонстрация
 #### 1. Подготовка к запуску
-Клонирование репозитория  
-![git clone](./images/git-clone.png)  
-Установка зависимостей  
-![poetry install](./images/poetry-install.png)   
-Запуск базы данных  
-![docker-compose](./images/docker-compose-up.png)   
-Миграции  
-![docker-compose](./images/alembic-upgrade.png)   
-#### 2. Запуск сканера  
-Запускаем сканер  
-![docker-compose](./images/scanner.png)  
+
+#### 2. Запуск сканнера
+
 #### 3. Запуск сервера с API  
 Запускаем сервер  
 ![Start server](./images/server-run.png)  
