@@ -12,10 +12,32 @@
 `$ docker compose up`
 5. Проводим миграции баззы данных  
 `$ poetry run alembic upgrade head`
-6. Для запуска сканера Deribit:  
+
+## Запуск
+
+1. Для запуска сканера Deribit:  
 `$ poetry run scanner`
-7. Для запуска сервера с API:
+2. Для запуска сервера с API:  
 `$ poetry run fastapi-server`
+3. Для запуска тестов(в данном случая лишь одного):  
+`$ poetry run pytest`
+
+## Демонстрация
+#### 1. Подготовка к запуску
+
+#### 2. Запуск сканнера
+
+#### 3. Запуск сервера с API  
+Запускаем сервер
+![Start server](./images/server-run.png)
+Swagger по адресу ".../docs"
+![swagger endpoints](./images/swagger-endpoints.png)
+Redoc по адресу ".../redoc"
+![swagger endpoints](./images/redoc-endpoint-price-list.png)
+![swagger endpoints](./images/redoc-endpoint-last-price.png)
+Результаты запросов на сервер(через Swagger)
+![swagger endpoints](./images/swagger-curl-price-list.png)
+![swagger endpoints](./images/swagger-curl-last-price.png)
 ## Тестовое задание
 Тестовое задание на позицию junior back-
 end разработчика   
