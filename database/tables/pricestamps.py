@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, String, Integer, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import Select
+from sqlalchemy.sql import Select, desc
 from sqlalchemy.engine import Result
 import uuid
 
@@ -27,8 +27,9 @@ class Pricestamp(Base):
             raise
 
     @staticmethod
-    async def get_pricestamps(session: AsyncSession, min_timestamp: int = None, max_timestamp: int = None):
+    async def get_pricestamps(session: AsyncSession, ticker: str, min_timestamp: int = None, max_timestamp: int = None):
         query: Select = select(Pricestamp)
+        query: Select = query.filter(Pricestamp.ticker == ticker)
         query: Select = query.filter(Pricestamp.timestamp >= min_timestamp) if min_timestamp is not None else query
         query: Select = query.filter(Pricestamp.timestamp <= max_timestamp) if max_timestamp is not None else query
         query: Select = query.order_by(Pricestamp.timestamp)
