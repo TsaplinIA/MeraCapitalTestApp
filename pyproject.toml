@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "meracapitaltestapp"
+version = "0.1.0"
+description = ""
+authors = ["Tsaplin Ilya <tsaplin.ia@outlook.com>"]
+readme = "README.md"
+packages = [
+    { include = "scanner" },
+    { include = "api" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.97.0"
+sqlalchemy = "^2.0.16"
+uvicorn = "^0.22.0"
+alembic = "^1.11.1"
+aiohttp = "^3.8.4"
+apscheduler = "^3.10.1"
+pytest = "^7.3.2"
+aioresponses = "^0.7.4"
+asyncpg = "^0.27.0"
+pytest-asyncio = "^0.21.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+scanner = "scanner:cli"
+fastapi-server = "api:cli"
