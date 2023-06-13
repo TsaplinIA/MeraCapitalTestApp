@@ -18,7 +18,7 @@ def default_repr(x: "Base") -> str:
 
 Base.__repr__ = default_repr
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL, echo=False)
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
