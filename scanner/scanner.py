@@ -40,7 +40,6 @@ class Scanner:
     async def __do_one_request(currency: Currency, queue: asyncio.Queue):
         async with ClientSession() as session:
             async with session.get(currency.create_index_url()) as response:
-                print(123)
                 if response.status != 200:
                     # Skip for http errors
                     return
