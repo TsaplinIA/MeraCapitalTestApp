@@ -17,3 +17,7 @@ __DB_NAME = config("MC_DB_NAME", cast=str, default="postgres")
 __DB_PORT = config("MC_DB_PORT", cast=int, default=5432)
 
 DATABASE_URL = f"postgresql+asyncpg://{__DB_USER}:{__DB_PASSWORD}@{__DB_HOST}:{__DB_PORT}/{__DB_NAME}"
+
+
+DERIBIT_PUBLIC_API_URL = config("MC_DERIBIT_PUBLIC_API_URL", cast=str, default="https://test.deribit.com/api/v2/public")
+DERIBIT_SCANNER_UPDATE_TIME = config("MC_DERIBIT_SCANNER_UPDATE_TIME", cast=int, default=60)
