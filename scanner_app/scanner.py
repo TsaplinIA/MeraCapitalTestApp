@@ -7,7 +7,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from database import async_session, Pricestamp
 from config import DERIBIT_SCANNER_UPDATE_TIME
 
-from scanner.currency import Currency
+from database import Currency
 
 
 class Scanner:
@@ -18,8 +18,8 @@ class Scanner:
             cls.__instance = super().__new__(cls)
         return cls.__instance
 
-    def __init__(self, currencies: list[Currency]):
-        self._currencies = currencies
+    def __init__(self):
+        self._currencies = None
         self._loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._loop)
         self._scheduler = AsyncIOScheduler(event_loop=self._loop)
@@ -30,7 +30,7 @@ class Scanner:
         async with async_session() as session:
             for result in results:
                 await Pricestamp.create_pricestamp(
-                    ticker=result['ticker'],
+                    currency_idx=result['currency_idx'],
                     price=result['price'],
                     timestamp=result['timestamp'],
                     session=session,
@@ -52,10 +52,20 @@ class Scanner:
                 #  Get current time
                 timestamp = int(datetime.now().timestamp())
 
-                result = {"price": price, "ticker": currency.ticker, "timestamp": timestamp}
+                result = {
+                    "price": price,
+                    "currency_idx": currency.currency_idx,
+                    "timestamp": timestamp,
+                    "ticker": currency.ticker
+                }
                 await queue.put(result)
 
     async def _scan_deribit(self):
+
+        #  Get currencies from db
+        async with async_session() as session:
+            self._currencies = await Currency.get_all_currencies(session)
+
         #  Create async tasks
         results = []
         queue = asyncio.Queue()
