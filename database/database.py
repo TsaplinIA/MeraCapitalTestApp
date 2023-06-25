@@ -7,7 +7,7 @@ from config import DATABASE_URL
 
 
 class Base(AsyncAttrs, DeclarativeBase):
-re    def __repr__(self):
+    def __repr__(self):
         pk_name = inspect(x.__class__).primary_key[0].name
         pk_value = getattr(x, pk_name, "?")
         return f"({self.__class__.__name__} #{pk_value})"
