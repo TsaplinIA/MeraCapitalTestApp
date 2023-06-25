@@ -4,16 +4,15 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.sql import Select, desc
+from sqlalchemy.sql import Select, desc, text
 from sqlalchemy.engine import Result
-import uuid
 
 from database.database import Base
 
 
 class Pricestamp(Base):
     __tablename__ = "pricestamps"
-    pricestamp_idx = Column(UUID, primary_key=True, default=uuid.uuid4)
+    pricestamp_idx = Column(UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
     currency_idx = Column(UUID, ForeignKey('currencies.currency_idx'), nullable=False)
     price = Column(Integer, nullable=False)
     timestamp = Column(Integer, nullable=False)

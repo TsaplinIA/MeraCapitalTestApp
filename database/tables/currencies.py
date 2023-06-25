@@ -1,9 +1,8 @@
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Column, String, Integer, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import Select, desc
+from sqlalchemy.sql import Select, desc, text
 from sqlalchemy.engine import Result
-import uuid
 
 from database.database import Base
 from config import DERIBIT_PUBLIC_API_URL
@@ -11,7 +10,7 @@ from config import DERIBIT_PUBLIC_API_URL
 
 class Currency(Base):
     __tablename__ = "currencies"
-    currency_idx = Column(UUID, primary_key=True, default=uuid.uuid4)
+    currency_idx = Column(UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
     ticker = Column(String(8), nullable=False)
     index_price_name = Column(String(32), nullable=False)
 
