@@ -35,6 +35,7 @@ class Scanner:
                     timestamp=result['timestamp'],
                     session=session,
                 )
+                print(f"save pricestamp for {result['ticker']}")
 
     @staticmethod
     async def _do_one_request(currency: Currency, queue: asyncio.Queue):
