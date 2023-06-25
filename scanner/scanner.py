@@ -23,10 +23,10 @@ class Scanner:
         self._loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._loop)
         self._scheduler = AsyncIOScheduler(event_loop=self._loop)
-        self._scheduler.add_job(self.__scan_deribit, 'interval', seconds=DERIBIT_SCANNER_UPDATE_TIME)
+        self._scheduler.add_job(self._scan_deribit, 'interval', seconds=DERIBIT_SCANNER_UPDATE_TIME)
 
     @staticmethod
-    async def __save_to_db(results: list[dict]):
+    async def _save_to_db(results: list[dict]):
         async with async_session() as session:
             for result in results:
                 await Pricestamp.create_pricestamp(
@@ -37,7 +37,7 @@ class Scanner:
                 )
 
     @staticmethod
-    async def __do_one_request(currency: Currency, queue: asyncio.Queue):
+    async def _do_one_request(currency: Currency, queue: asyncio.Queue):
         async with ClientSession() as session:
             async with session.get(currency.create_index_url()) as response:
                 if response.status != 200:
@@ -55,12 +55,12 @@ class Scanner:
                 result = {"price": price, "ticker": currency.ticker, "timestamp": timestamp}
                 await queue.put(result)
 
-    async def __scan_deribit(self):
+    async def _scan_deribit(self):
         #  Create async tasks
         results = []
         queue = asyncio.Queue()
 
-        futures = [self.__do_one_request(currency, queue) for currency in self._currencies]
+        futures = [self._do_one_request(currency, queue) for currency in self._currencies]
         await asyncio.gather(*futures)
 
         #  Execute tasks
@@ -68,7 +68,7 @@ class Scanner:
             results.append(await queue.get())
 
         #  Save results to DB
-        await self.__save_to_db(results)
+        await self._save_to_db(results)
 
     def start(self):
         self._scheduler.start()
