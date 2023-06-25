@@ -7,16 +7,11 @@ from config import DATABASE_URL
 
 
 class Base(AsyncAttrs, DeclarativeBase):
-    pass
+re    def __repr__(self):
+        pk_name = inspect(x.__class__).primary_key[0].name
+        pk_value = getattr(x, pk_name, "?")
+        return f"({self.__class__.__name__} #{pk_value})"
 
-
-def default_repr(x: "Base") -> str:
-    pk_name = inspect(x.__class__).primary_key[0].name
-    pk_value = getattr(x, pk_name, "?")
-    return f"({x.__class__.__name__} #{pk_value})"
-
-
-Base.__repr__ = default_repr
 
 engine = create_async_engine(DATABASE_URL, echo=False)
 async_session = async_sessionmaker(engine, expire_on_commit=False)
