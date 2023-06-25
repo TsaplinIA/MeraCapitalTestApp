@@ -11,6 +11,7 @@ from config import DERIBIT_PUBLIC_API_URL
 
 class Currency(Base):
     __tablename__ = "currencies"
+
     currency_idx = Column(UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
     ticker = Column(String(8), nullable=False)
     index_price_name = Column(String(32), nullable=False)

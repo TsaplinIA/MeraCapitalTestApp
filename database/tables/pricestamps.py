@@ -12,6 +12,7 @@ from database.database import Base
 
 class Pricestamp(Base):
     __tablename__ = "pricestamps"
+
     pricestamp_idx = Column(UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
     currency_idx = Column(UUID, ForeignKey('currencies.currency_idx'), nullable=False)
     price = Column(Integer, nullable=False)
