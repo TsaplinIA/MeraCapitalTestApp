@@ -29,7 +29,7 @@ class Pricestamp(Base):
             await session.commit()
             print(f"Pricestamp {str(new_pricestamp.pricestamp_idx)} has been saved")
             return new_pricestamp
-        except:
+        except SQLAlchemyError:
             await session.rollback()
             raise
 
