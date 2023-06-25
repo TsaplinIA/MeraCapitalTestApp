@@ -1,6 +1,9 @@
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column, String, Integer, select
+from sqlalchemy import Column, String, Integer, select, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql import Select, desc
 from sqlalchemy.engine import Result
 import uuid
@@ -11,9 +14,12 @@ from database.database import Base
 class Pricestamp(Base):
     __tablename__ = "pricestamps"
     pricestamp_idx = Column(UUID, primary_key=True, default=uuid.uuid4)
-    ticker = Column(String(8), nullable=False)
+    currency_idx = Column(UUID, ForeignKey('currencies.currency_idx'), nullable=False)
     price = Column(Integer, nullable=False)
     timestamp = Column(Integer, nullable=False)
+
+    currency = relationship('User')
+    ticker = association_proxy('currency', 'ticker')
 
     @staticmethod
     async def create_pricestamp(ticker: str, price: int, timestamp: int, session: AsyncSession):
