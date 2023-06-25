@@ -29,7 +29,7 @@ async def test_do_one_request():
         mock_response.get(currency.create_index_url(), status=200, payload=response_json)
 
         # Call the method under test
-        await scanner._Scanner__do_one_request(currency, queue)
+        await scanner._do_one_request(currency, queue)
 
     # Perform assertions on the contents of the queue
     assert queue.qsize() == 1
