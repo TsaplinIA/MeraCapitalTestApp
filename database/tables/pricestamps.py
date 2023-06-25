@@ -21,8 +21,8 @@ class Pricestamp(Base):
     ticker: AssociationProxy[str] = association_proxy('currency', 'ticker')
 
     @staticmethod
-    async def create_pricestamp(ticker: str, price: int, timestamp: int, session: AsyncSession):
-        new_pricestamp = Pricestamp(ticker=ticker, price=price, timestamp=timestamp)
+    async def create_pricestamp(currency_idx: str, price: int, timestamp: int, session: AsyncSession):
+        new_pricestamp = Pricestamp(currency_idx=currency_idx, price=price, timestamp=timestamp)
         session.add(new_pricestamp)
         try:
             await session.commit()
