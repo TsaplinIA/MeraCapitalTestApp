@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
 
-from api.endpoints import router
+from api.endpoints.pricestamps import pricestamps_router
 
 app = FastAPI(title="Mera Capital Test app")
-app.include_router(router)
+app.include_router(pricestamps_router, tags=['pricestamps'])
 
 
 def cli():
