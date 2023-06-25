@@ -27,3 +27,26 @@ class Currency(Base):
         query: Select = select(Currency)
         query_result: Result = await session.execute(query)
         return query_result.scalars().all()
+
+    @staticmethod
+    async def get_currency_by_idx(currency_idx: UUID, session: AsyncSession = Depends(get_session)):
+        query: Select = select(Currency)
+        query: Select = query.filter(Currency.currency_idx == currency_idx)
+        query_result: Result = await session.execute(query)
+        return query_result.scalars().first()
+
+    @staticmethod
+    async def create_currency(
+            ticker: str,
+            index_price_name: str,
+            session: AsyncSession = Depends(get_session)
+    ):
+        new_currency = Currency(ticker=ticker, index_price_name=index_price_name)
+        session.add(new_currency)
+        try:
+            await session.commit()
+            print(f"Currency {str(new_currency.currency_idx)} has been created")
+            return new_currency
+        except SQLAlchemyError:
+            await session.rollback()
+            raise
