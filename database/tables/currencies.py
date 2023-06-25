@@ -1,7 +1,10 @@
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column, String, Integer, select
+from uuid import UUID
+
+from sqlalchemy.dialects.postgresql import UUID as POSTGRES_UUID
+from sqlalchemy import Column, String, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import Select, desc, text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.sql import Select, text
 from sqlalchemy.engine import Result
 from fastapi import Depends
 
@@ -12,9 +15,9 @@ from config import DERIBIT_PUBLIC_API_URL
 class Currency(Base):
     __tablename__ = "currencies"
 
-    currency_idx = Column(UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
-    ticker = Column(String(8), nullable=False)
-    index_price_name = Column(String(32), nullable=False)
+    currency_idx = Column(POSTGRES_UUID, primary_key=True, server_default=text("uuid_generate_v4()"))
+    ticker = Column(String(8), nullable=False, unique=True)
+    index_price_name = Column(String(32), nullable=False, unique=True)
 
     def create_index_url(self) -> str:
         return f"{DERIBIT_PUBLIC_API_URL}/get_index_price?index_name={self.index_price_name}"
