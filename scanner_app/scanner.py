@@ -26,9 +26,10 @@ class Scanner:
         self._scheduler.add_job(self._scan_deribit, 'interval', seconds=DERIBIT_SCANNER_UPDATE_TIME)
 
     @staticmethod
-    async def _save_to_db(results: list[dict]):
+    async def _save_to_db(queue: asyncio.Queue):
         async with async_session() as session:
-            for result in results:
+            while not queue.empty():
+                result = await queue.get()
                 await Pricestamp.create_pricestamp(
                     currency_idx=result['currency_idx'],
                     price=result['price'],
@@ -68,18 +69,13 @@ class Scanner:
             self._currencies = await Currency.get_all_currencies(session)
 
         #  Create async tasks
-        results = []
         queue = asyncio.Queue()
 
         futures = [self._do_one_request(currency, queue) for currency in self._currencies]
         await asyncio.gather(*futures)
 
-        #  Execute tasks
-        while not queue.empty():
-            results.append(await queue.get())
-
         #  Save results to DB
-        await self._save_to_db(results)
+        await self._save_to_db(queue)
 
     def start(self):
         self._scheduler.start()
