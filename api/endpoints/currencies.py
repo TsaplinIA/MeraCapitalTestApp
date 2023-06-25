@@ -15,7 +15,7 @@ currencies_router = APIRouter()
     description="Get list of currencies from database",
     response_model=list[CurrencyModel],
 )
-async def get_currency_by_id_view(currencies: list[Currency] = Depends(Currency.get_all_currencies)):
+async def get_currencies_view(currencies: list[Currency] = Depends(Currency.get_all_currencies)):
     return currencies
 
 
