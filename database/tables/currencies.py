@@ -45,7 +45,6 @@ class Currency(Base):
         session.add(new_currency)
         try:
             await session.commit()
-            print(f"Currency {str(new_currency.currency_idx)} has been created")
             return new_currency
         except SQLAlchemyError:
             await session.rollback()
