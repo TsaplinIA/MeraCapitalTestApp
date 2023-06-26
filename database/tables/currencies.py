@@ -49,3 +49,20 @@ class Currency(Base):
         except SQLAlchemyError:
             await session.rollback()
             raise
+
+    @staticmethod
+    async def update_currency_by_idx(
+            idx: UUID,
+            new_ticker: str = None,
+            new_index_price_name: str = None,
+            session: AsyncSession = Depends(get_session)
+    ):
+        currency: Currency = await Currency.get_currency_by_idx(idx)
+        currency.ticker = currency.ticker if new_ticker is None else new_ticker
+        currency.index_price_name = currency.index_price_name if new_index_price_name is None else new_index_price_name
+        try:
+            await session.commit()
+            return currency
+        except SQLAlchemyError:
+            await session.rollback()
+            raise
