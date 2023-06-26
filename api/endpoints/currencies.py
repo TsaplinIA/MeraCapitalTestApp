@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.models.currencies import CurrencyModel
+from api.models.currencies import CurrencyModel, CurrencyCreateModel
 from database import get_session, Currency
 
 currencies_router = APIRouter()
@@ -37,5 +37,9 @@ async def get_currency_by_id_view(currency: Currency = Depends(Currency.get_curr
     description="Create currency. Specify index_price_name and ticker",
     response_model=CurrencyModel,
 )
-async def create_currency_view(currency: Currency = Depends(Currency.create_currency)):
+async def create_currency_view(
+        data: CurrencyCreateModel,
+        session: AsyncSession = Depends(get_session),
+):
+    currency = Currency.create_currency(data.ticker, data.index_price_name, session)
     return currency
