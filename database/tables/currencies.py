@@ -3,13 +3,16 @@ from uuid import UUID
 from sqlalchemy.dialects.postgresql import UUID as POSTGRES_UUID
 from sqlalchemy import Column, String, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.sql import Select, text
 from sqlalchemy.engine import Result
 from fastapi import Depends
 
+from exceptions.currencies import CurrencyNotFound
+from exceptions.sql_errors import DuplicateKeyError
 from database.database import Base, get_session
 from config import DERIBIT_PUBLIC_API_URL
+from utils.sqlalchemy_error_parsing import parse_duplicate_key_error
 
 
 class Currency(Base):
@@ -46,6 +49,12 @@ class Currency(Base):
         try:
             await session.commit()
             return new_currency
+        except IntegrityError as e:
+            error_string = str(e)
+            if "duplicate key" not in error_string:
+                raise
+            table_name, column_name, value = parse_duplicate_key_error(error_string)
+            raise DuplicateKeyError(table_name, column_name, value)
         except SQLAlchemyError:
             await session.rollback()
             raise
@@ -57,12 +66,20 @@ class Currency(Base):
             new_index_price_name: str = None,
             session: AsyncSession = Depends(get_session)
     ):
-        currency: Currency = await Currency.get_currency_by_idx(idx)
+        currency: Currency = await Currency.get_currency_by_idx(idx, session)
+        if currency is None:
+            raise CurrencyNotFound(idx)
         currency.ticker = currency.ticker if new_ticker is None else new_ticker
         currency.index_price_name = currency.index_price_name if new_index_price_name is None else new_index_price_name
         try:
             await session.commit()
             return currency
+        except IntegrityError as e:
+            error_string = str(e)
+            if "duplicate key" not in error_string:
+                raise
+            table_name, column_name, value = parse_duplicate_key_error(error_string)
+            raise DuplicateKeyError(table_name, column_name, value)
         except SQLAlchemyError:
             await session.rollback()
             raise
