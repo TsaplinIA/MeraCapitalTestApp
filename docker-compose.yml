@@ -9,6 +9,7 @@ services:
       PGDATA: /data/postgres
     volumes:
        - postgres:/data/postgres
+       - ./database/migrations/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     ports:
       - ${MC_DB_PORT:-5432}:5432
     restart: unless-stopped
