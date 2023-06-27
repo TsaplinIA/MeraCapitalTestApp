@@ -3,14 +3,14 @@ services:
     container_name: mc_postgres
     image: postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${MC_DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${MC_DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${MC_DB_NAME:-postgres}
       PGDATA: /data/postgres
     volumes:
        - postgres:/data/postgres
     ports:
-      - "5432:5432"
+      - ${MC_DB_PORT:-5432}:5432
     restart: unless-stopped
 
 volumes:
