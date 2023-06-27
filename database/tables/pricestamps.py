@@ -18,7 +18,7 @@ class Pricestamp(Base):
     price = Column(Integer, nullable=False)
     timestamp = Column(Integer, nullable=False)
 
-    currency = relationship('Currency')
+    currency = relationship('Currency', cascade='save-update, merge, delete')
     ticker: AssociationProxy[str] = association_proxy('currency', 'ticker')
 
     @staticmethod

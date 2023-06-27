@@ -26,7 +26,7 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint('currency_idx')
     )
     op.add_column('pricestamps', sa.Column('currency_idx', sa.UUID(), nullable=False))
-    op.create_foreign_key(None, 'pricestamps', 'currencies', ['currency_idx'], ['currency_idx'])
+    op.create_foreign_key(None, 'pricestamps', 'currencies', ['currency_idx'], ['currency_idx'], ondelete='CASCADE')
     op.drop_column('pricestamps', 'ticker')
     # ### end Alembic commands ###
 
