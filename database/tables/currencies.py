@@ -83,3 +83,18 @@ class Currency(Base):
         except SQLAlchemyError:
             await session.rollback()
             raise
+
+    @staticmethod
+    async def delete_currency(currency_idx: UUID, session: AsyncSession = Depends(get_session)):
+        currency = await Currency.get_currency_by_idx(currency_idx, session)
+        if currency is None:
+            raise CurrencyNotFound(currency_idx)
+        try:
+            await session.delete(currency)
+            await session.commit()
+            return True
+        except SQLAlchemyError:
+            await session.rollback()
+            raise
+
+
